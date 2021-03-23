@@ -1,5 +1,5 @@
 # mvhfunctions
-plotting and stats functions for R.
+plotting and stats functions for R version 4.0 or higher.
 
 to install:
 ```
