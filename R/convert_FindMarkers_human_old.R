@@ -1,4 +1,4 @@
-#' @title convert_FindMarkers_human
+#' @title convert_FindMarkers_human_old
 #' @description convert the output of the Seurat function FindMarkers from fish genes to human.
 #' @param fish_genelist FindMarkers results dataframe.
 #' @param create_ranked_vector if T, will convert the output into a ranked vector with human genes as name and avg_logFC as values, to use for GSEA.
@@ -6,9 +6,9 @@
 #' @export
 #' @return if create_ranked_vector = T, a ranked vector with human genes as name and avg_logFC as values, to use for GSEA. if F, a dataframe.
 #'
-convert_FindMarkers_human <- function(fish_genelist, create_ranked_vector = T, remove_ribosomal_genes = T) {
+convert_FindMarkers_human_old <- function(fish_genelist, create_ranked_vector = T, remove_ribosomal_genes = T) {
   # convert output of FindMarkers to human genes
-  # if create_ranked_vector = T: will return a ranked vector with human gene symbols and logFC, to be used for GSEA
+  # if create_ranked_vector = T: return a ranked vector with human gene symbols and logFC, to be used for GSEA
 
   fish.human.convert.Z11 <- read.delim("/Users/hunterm/Documents/R/from_Nate/GRCz11_to_HS.txt")
   fish.human.convert.Z11 <- fish.human.convert.Z11[fish.human.convert.Z11$DIOPT_Score > 6, ]
