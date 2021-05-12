@@ -10,7 +10,7 @@
 #' @export
 #' @return UMAP or PCA plot.
 
-nice_dim_plot <- function(seurat_obj, group_by = "seurat_clusters", cols = NULL, pt_size = 1.3, label = T, reduction = "umap", dims_plot = 1:2) {
+nice_dim_plot <- function(seurat_obj, group_by = NULL, cols = NULL, pt_size = 1.3, label = T, reduction = "umap", dims_plot = 1:2) {
 
   if (reduction == "umap") {
     xlab <- "UMAP 1"
@@ -29,7 +29,7 @@ nice_dim_plot <- function(seurat_obj, group_by = "seurat_clusters", cols = NULL,
     if (label == T) {
       plot <- Seurat::DimPlot(seurat_obj,
                               group.by = group_by,
-                              pt.size = pt.size,
+                              pt.size = pt_size,
                               reduction = reduction,
                               cols = cols,
                               label = T) +
@@ -43,7 +43,7 @@ nice_dim_plot <- function(seurat_obj, group_by = "seurat_clusters", cols = NULL,
     } else {
       plot <- Seurat::DimPlot(seurat_obj,
                               group.by = group_by,
-                              pt.size = pt.size,
+                              pt.size = pt_size,
                               reduction = reduction,
                               cols = cols,
                               label = F) +
@@ -61,7 +61,7 @@ nice_dim_plot <- function(seurat_obj, group_by = "seurat_clusters", cols = NULL,
     if (label == T) {
       plots <- Seurat::DimPlot(seurat_obj,
                                group.by = group_by,
-                               pt.size = pt.size,
+                               pt.size = pt_size,
                                combine = F,
                                reduction = reduction,
                                cols = cols,
@@ -77,7 +77,7 @@ nice_dim_plot <- function(seurat_obj, group_by = "seurat_clusters", cols = NULL,
     } else {
       plots <- Seurat::DimPlot(seurat_obj,
                                group.by = group_by,
-                               pt.size = pt.size,
+                               pt.size = pt_size,
                                combine = F,
                                reduction = reduction,
                                cols = cols,
