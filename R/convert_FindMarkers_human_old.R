@@ -10,7 +10,7 @@ convert_FindMarkers_human_old <- function(fish_genelist, create_ranked_vector = 
   # convert output of FindMarkers to human genes
   # if create_ranked_vector = T: return a ranked vector with human gene symbols and logFC, to be used for GSEA
 
-  fish.human.convert.Z11 <- read.delim("/Users/hunterm/Documents/R/from_Nate/GRCz11_to_HS.txt")
+  fish.human.convert.Z11 <- read.delim("GRCz11_to_HS.txt")
   fish.human.convert.Z11 <- fish.human.convert.Z11[fish.human.convert.Z11$DIOPT_Score > 6, ]
 
   genelist <- fish_genelist
@@ -37,7 +37,7 @@ convert_FindMarkers_human_old <- function(fish_genelist, create_ranked_vector = 
     message("No duplicated genes, conversion complete")
 
     if (create_ranked_vector == T) {
-      h.genelist.vector <- merge %>% dplyr::select(Human_Symbol, avg_logFC) %>% deframe()
+      h.genelist.vector <- merge %>% dplyr::select(Human_Symbol, avg_log2FC) %>% deframe()
       return(h.genelist.vector)
     } else {
       return(merge)
@@ -51,7 +51,7 @@ convert_FindMarkers_human_old <- function(fish_genelist, create_ranked_vector = 
 
     for (ii in 1:length(gene.dups)) {
       genes <- merge[merge$Human_Symbol == gene.dups[ii], ] %>%
-        dplyr::arrange(desc(avg_logFC))
+        dplyr::arrange(desc(avg_log2FC))
       dups[[ii]] <- genes[1,]
     }
 
