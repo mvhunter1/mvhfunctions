@@ -24,6 +24,12 @@ convert_FindMarkers_human <- function(genelist, remove_ribosomal_genes = T, crea
     stop("You must have a column with the gene names called \"gene\" in your FindMarkers results to proceed with this function.")
   }
   
+  # check for differences in column names caused by different versions of FindMarkers
+  if ("avg_logFC" %in% colnames(genelist)) {
+    index <- match("avg_logFC", colnames(genelist))
+    colnames(genelist)[index] <- "avg_log2FC"
+  }
+  
   if (remove_ribosomal_genes) {
     genelist <- genelist[grep(pattern = "^rps|^rpl", x = genelist$gene, invert = T),]
   }
