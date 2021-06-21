@@ -12,7 +12,7 @@
 
 nice_dim_plot <- function(seurat_obj, group_by = NULL, cols = NULL, pt_size = 1.3, label = T, reduction = "umap", dims_plot = 1:2) {
 
-  if (reduction == "umap") {
+  if (reduction == "umap" | reduction == "umap_new") {
     xlab <- "UMAP 1"
     ylab <- "UMAP 2"
   } else if (reduction == "pca") {
@@ -22,6 +22,9 @@ nice_dim_plot <- function(seurat_obj, group_by = NULL, cols = NULL, pt_size = 1.
     # make x and y axis labels
     xlab <- paste0("PC", dims_plot[1], " ", round(pct[dims_plot[1]],2), "%")
     ylab <- paste0("PC", dims_plot[2], " ", round(pct[dims_plot[2]],2), "%")
+  } else {
+    xlab <- paste(reduction, "1")
+    ylab <- paste(reduction, "2")
   }
 
   if (length(group_by) == 1) {
