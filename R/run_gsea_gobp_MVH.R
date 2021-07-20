@@ -29,13 +29,14 @@ run_gsea_gobp_MVH <- function(marker_list, filter_pval = T) {
   
   # run gsea
   set.seed(3)
-  gsea_gobp <- fgseaMultilevel(pathways = genesets.GOBP,
-                               stats = marker_list_human) %>%
+  gsea_gobp <- fgsea(pathways = genesets.GOBP,
+                     stats = marker_list_human,
+                     nproc = 1) %>%
     arrange(desc(NES)) %>% 
     mutate(log10pval = -log10(pval)) %>%
     select(pathway, NES, pval, log10pval, everything())
   
   message('Done!\n')
   return(gsea_gobp)
- 
+  
 }

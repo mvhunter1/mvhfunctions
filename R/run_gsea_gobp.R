@@ -25,12 +25,13 @@ run_gsea_gobp <- function(marker_list, filter_pval = T) {
   marker_list_human <- marker_list %>% convert_FindMarkers_human()
   
   # run gsea
-  gsea_gobp <- fgseaMultilevel(pathways = genesets.GOBP,
-                               stats = marker_list_human) %>%
+  gsea_gobp <- fgsea(pathways = genesets.GOBP,
+                     stats = marker_list_human,
+                     nproc = 1) %>%
     arrange(desc(NES)) %>% 
     mutate(log10pval = -log10(pval)) %>%
     select(pathway, NES, pval, log10pval, everything())
   
   return(gsea_gobp)
- 
+  
 }
