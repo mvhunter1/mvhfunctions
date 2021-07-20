@@ -12,7 +12,7 @@ run_gsea_gobp_MVH(marker_list, filter_pval = T)
 \item{filter_pval}{if T, filters FindMarkers results to remove p > 0.05.}
 }
 \value{
-fGSEA results as dataframe.
+fGSEA results as data frame.
 }
 \description{
 Run fGSEA on GO biological processes pathway set.

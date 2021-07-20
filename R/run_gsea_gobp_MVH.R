@@ -3,7 +3,7 @@
 #' @param marker_list FindMarkers output, not converted to human.
 #' @param filter_pval if T, filters FindMarkers results to remove p > 0.05.
 #' @export
-#' @return fGSEA results as dataframe.
+#' @return fGSEA results as data frame.
 
 run_gsea_gobp_MVH <- function(marker_list, filter_pval = T) {
   
