@@ -42,8 +42,10 @@ plot_ccle_data <- function(ccle_data, genes, cell_line_id = "A375") {
     ylab("normalized expression\n(log2 RSEM)")
   
   # Use sample_info.csv to get cell line names.
-  
+  cell_line_name <- ccle_sample_info[ccle_sample_info$DepMap_ID == cell_line_id,]$stripped_cell_line_name
+  # Add cell line name to plot.
+  plot <- plot + ggtitle(paste("Expression in", "cell_line_name")) + theme(plot.title = element_text(size = 24, hjust = 0.5))
+  return(plot)
     
-  
   return(plot)
 }
