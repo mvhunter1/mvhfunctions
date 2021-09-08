@@ -47,5 +47,4 @@ plot_ccle_data <- function(ccle_data, genes, cell_line_id = "A375") {
   plot <- plot + ggtitle(paste("Expression in", "cell_line_name")) + theme(plot.title = element_text(size = 24, hjust = 0.5))
   return(plot)
     
-  return(plot)
 }
