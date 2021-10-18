@@ -17,7 +17,7 @@ convert_FindMarkers_human_MVH <- function(genelist, remove_ribosomal_genes = T, 
   # }, error = function(e) {
   #   stop('Must have conversion table saved as GRCz11_to_HS.txt in working directory.')
   # })  
-  fish.human.convert.Z11 <- read.delim('/Users/hunterm/Dropbox/MH_ST/Miranda_R/from_Nate/GRCz11_to_HS.txt')
+  fish.human.convert.Z11 <- read.delim('/Users/hunterm/Google Drive/Miranda_R_new/from_Nate/GRCz11_to_HS.txt')
   fish.human.convert.Z11 <- fish.human.convert.Z11[fish.human.convert.Z11$DIOPT_Score > 6,]
   
   # check for presence of a "gene" column in df. If not, give an error message.
