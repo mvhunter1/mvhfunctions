@@ -27,7 +27,7 @@ nice_dim_plot <- function(seurat_obj, group_by = NULL, cols = NULL, pt_size = 1.
     ylab <- paste(reduction, "2")
   }
   
-  if (length(group_by) == 1) {
+  if (length(group_by) == 1 | is.null(group_by)) {
     
     if (label == T) {
       plot <- Seurat::DimPlot(seurat_obj,
