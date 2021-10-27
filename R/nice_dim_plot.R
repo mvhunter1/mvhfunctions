@@ -1,7 +1,7 @@
 #' @title nice_dim_plot
 #' @description nicer looking version of the Seurat function DimPlot.
 #' @param seurat_obj Seurat object.
-#' @param group_by what to colour the points by, usually a column in the Seurat object metadata.
+#' @param group_by optional: what to colour the points by, usually a column in the Seurat object metadata. Otherwise will color by the default ident.
 #' @param cols optional: colours to label the grouped points by.
 #' @param pt_size point size.
 #' @param label label groups with text on plot?
