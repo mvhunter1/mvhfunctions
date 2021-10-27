@@ -11,14 +11,14 @@
 #' @return UMAP or PCA plot.
 
 nice_dim_plot <- function(seurat_obj, group_by = NULL, cols = NULL, pt_size = 1.3, label = T, reduction = "umap", dims_plot = 1:2) {
-
+  
   if (reduction == "umap" | reduction == "umap_new") {
     xlab <- "UMAP 1"
     ylab <- "UMAP 2"
   } else if (reduction == "pca") {
     # determine % variability associated with each PC
     pct <- seurat_obj[["pca"]]@stdev / sum(seurat_obj[["pca"]]@stdev) * 100
-
+    
     # make x and y axis labels
     xlab <- paste0("PC", dims_plot[1], " ", round(pct[dims_plot[1]],2), "%")
     ylab <- paste0("PC", dims_plot[2], " ", round(pct[dims_plot[2]],2), "%")
@@ -26,9 +26,9 @@ nice_dim_plot <- function(seurat_obj, group_by = NULL, cols = NULL, pt_size = 1.
     xlab <- paste(reduction, "1")
     ylab <- paste(reduction, "2")
   }
-
+  
   if (length(group_by) == 1) {
-
+    
     if (label == T) {
       plot <- Seurat::DimPlot(seurat_obj,
                               group.by = group_by,
@@ -58,9 +58,9 @@ nice_dim_plot <- function(seurat_obj, group_by = NULL, cols = NULL, pt_size = 1.
               axis.line = element_line(size = 1))
     }
     return(plot)
-
+    
   } else if (length(group_by) > 1) {
-
+    
     if (label == T) {
       plots <- Seurat::DimPlot(seurat_obj,
                                group.by = group_by,
@@ -95,8 +95,6 @@ nice_dim_plot <- function(seurat_obj, group_by = NULL, cols = NULL, pt_size = 1.
     }
     plots_use <- cowplot::plot_grid(plotlist = plots, ncol = n_col)
     return(plots_use)
-  } else {
-    stop("group_by is missing")
   }
 }
 
