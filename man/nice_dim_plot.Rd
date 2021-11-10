@@ -17,7 +17,7 @@ nice_dim_plot(
 \arguments{
 \item{seurat_obj}{Seurat object.}
 
-\item{group_by}{what to colour the points by, usually a column in the Seurat object metadata.}
+\item{group_by}{optional: what to colour the points by, usually a column in the Seurat object metadata. Otherwise will color by the default ident.}
 
 \item{cols}{optional: colours to label the grouped points by.}
 

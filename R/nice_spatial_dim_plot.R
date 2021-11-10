@@ -8,26 +8,48 @@
 #' @param cols optional: vector of colours for each plotted group.
 #' @param label if T, will label groups with text on plot.
 #' @param show_legend if T, will include the legend but won't label points w/text on plot.
+#' @param crop Crop tissue array to focus on region with spots?
 #' @export
 #' @return SpatialPlot.
 
-nice_spatial_dim_plot <- function(seurat_obj, group.by, im_alpha = 0, pt.size = 1.4, stroke = 0, cols = NULL, label = F, show_legend = T) {
-
+nice_spatial_dim_plot2 <- function(seurat_obj, group.by, im_alpha = 0, pt.size = 1.4, 
+                                    stroke = 0, cols = NULL, label = F, show_legend = T, crop = T) {
+  
+  require(Seurat)
+  require(pals)
+  
+  # determine colormap to use
+  n_dims <- seurat_obj[[group.by]] %>% unique() %>% nrow()
+  
+  if (is.null(cols)) {
+    if (n_dims <= 12) {
+      cols <- tol(n_dims)
+    } else if (n_dims <= 22) {
+      cols <- kelly(n = n_dims)
+    } else {
+      cols <- NULL
+    }
+  }
+  
+  
   if (label) {
-    plot <- Seurat::SpatialPlot(seurat_obj,
-                                group.by = group.by,
-                                image.alpha = im_alpha,
-                                pt.size.factor = pt.size,
-                                stroke = stroke,
-                                cols = cols,
+    plot <- Seurat::SpatialPlot(seurat_obj, 
+                                group.by = group.by, 
+                                image.alpha = im_alpha, 
+                                pt.size.factor = pt.size, 
+                                stroke = stroke, 
+                                cols = cols, 
+                                crop = crop,
                                 label = T) + NoLegend()
-  } else {
-    plot <- Seurat::SpatialPlot(seurat_obj,
-                                group.by = group.by,
-                                image.alpha = im_alpha,
-                                pt.size.factor = pt.size,
-                                stroke = stroke,
-                                cols = cols,
+  }
+  else {
+    plot <- Seurat::SpatialPlot(seurat_obj, 
+                                group.by = group.by, 
+                                image.alpha = im_alpha, 
+                                pt.size.factor = pt.size, 
+                                stroke = stroke, 
+                                cols = cols, 
+                                crop = crop,
                                 label = F)
   }
   return(plot)
