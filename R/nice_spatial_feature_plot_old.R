@@ -1,4 +1,4 @@
-#' @title nice_spatial_feature_plot
+#' @title nice_spatial_feature_plot_old
 #' @description nicer looking version of the Seurat function SpatialFeaturePlot.
 #' @param seurat_obj Seurat object.
 #' @param features genes to plot.
@@ -14,7 +14,7 @@
 #' @export
 #' @return SpatialFeaturePlot.
 
-nice_spatial_feature_plot <- function(seurat_obj, features, im_alpha = 0, pt_size = 1.4, stroke = 0, new_cmap = T, cmap = "inferno", n_col = NULL, diverging_cmap = T, alpha = T, cols = NULL) {
+nice_spatial_feature_plot_old <- function(seurat_obj, features, im_alpha = 0, pt_size = 1.4, stroke = 0, new_cmap = T, cmap = "inferno", n_col = NULL, diverging_cmap = T, alpha = T, cols = NULL) {
 
   if (length(features) == 1 & is.null(n_col)) {
     n_col <- 1

@@ -1,4 +1,4 @@
-#' @title nice_spatial_dim_plot
+#' @title nice_spatial_dim_plot_old
 #' @description nicer looking version of the Seurat function SpatialDimPlot.
 #' @param seurat_obj Seurat object.
 #' @param group.by what to colour the points by, usually a column in the Seurat object metadata.
@@ -11,7 +11,7 @@
 #' @export
 #' @return SpatialPlot.
 
-nice_spatial_dim_plot <- function(seurat_obj, group.by, im_alpha = 0, pt.size = 1.4, stroke = 0, cols = NULL, label = F, show_legend = T) {
+nice_spatial_dim_plot_old <- function(seurat_obj, group.by, im_alpha = 0, pt.size = 1.4, stroke = 0, cols = NULL, label = F, show_legend = T) {
 
   if (label) {
     plot <- Seurat::SpatialPlot(seurat_obj,
