@@ -9,10 +9,10 @@
 #' @export
 #' @return bar graph.
 
-go_term_bar <- function(gsea_results, n_terms = 10, metric = "NES", fill = T, change_labels = T, pval_fill = T) {
+go_term_bar <- function(gsea_results, n_terms = 10, metric = "NES", fill = T, change_labels = F, pval_fill = T) {
   if (change_labels == T) {
     gsea_results$pathway <- gsea_results$pathway %>%
-      gsub(pattern = "GO_", replacement = "", x = ., ignore.case = F) %>%
+      gsub(pattern = "GOBP_", replacement = "", x = ., ignore.case = F) %>%
       gsub(pattern = "_", replacement = " ", x = .) %>%
       gsub(pattern = "plus", replacement = "+", x = .) %>%
       tolower()
