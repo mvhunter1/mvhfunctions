@@ -9,7 +9,7 @@ go_term_bar(
   n_terms = 10,
   metric = "NES",
   fill = T,
-  change_labels = T,
+  change_labels = F,
   pval_fill = T
 )
 }
