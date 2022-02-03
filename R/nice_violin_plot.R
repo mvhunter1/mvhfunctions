@@ -11,12 +11,27 @@
 #' @export
 #' @return violin plot.
 #'
+
 nice_violin_plot <- function(seurat_obj, features, group_by = NULL, cols = NULL, pt.size = 0.3, sort = T, n_col = NULL, plot_hline = T) {
+  
+  # determine number of violins
+  if (!is.null(group_by)) {
+    n_groups <- seurat_obj[[]] %>% dplyr::select(all_of(group_by)) %>% unique() %>% nrow()
+  } else {
+    n_groups <- as.character(unique(Idents(seurat_obj))) %>% length()
+  }
+  
+  # set colormap 
+  if ((is.null(cols)) & (length(features) < 13)) {
+    cols <- tol(n_groups)
+  }
+  
   if (length(features) == 1) {
     plot <- Seurat::VlnPlot(seurat_obj,
                             group.by = group_by,
                             features = features,
                             pt.size = pt.size,
+                            cols = cols,
                             sort = sort) +
       Seurat::NoLegend() +
       theme(axis.title.x = element_blank(),
@@ -34,6 +49,7 @@ nice_violin_plot <- function(seurat_obj, features, group_by = NULL, cols = NULL,
                                 features = features,
                                 pt.size = pt.size,
                                 sort = sort,
+                                cols = cols,
                                 combine = F)
     plotlist <- lapply(plotlist, function(x)
       x + theme(axis.title.x = element_blank(),
