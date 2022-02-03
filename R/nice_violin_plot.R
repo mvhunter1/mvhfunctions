@@ -8,20 +8,25 @@
 #' @param sort sort X axis in descending order of average expression?
 #' @param n_col if multiple features, how many columns to create in the final plot_grid object.
 #' @param plot_hline plot a dashed horizontal line at 0?
+#' @param perform_stats perform pairwise wilcoxon rank sum test between groups and print P values? *** only works for single plots for now
 #' @export
 #' @return violin plot.
 #'
 
-nice_violin_plot <- function(seurat_obj, features, group_by = NULL, cols = NULL, pt.size = 0.3, sort = T, n_col = NULL, plot_hline = T) {
+nice_violin_plot <- function(seurat_obj, features, group_by = NULL, cols = NULL, pt.size = 0.3, sort = T, n_col = NULL, plot_hline = T, perform_stats = T) {
   
-  require(pals)
+  require(Seurat)
   require(tidyverse)
+  require(pals)
+  require(reshape2)
   
   # determine number of violins
   if (!is.null(group_by)) {
-    n_groups <- seurat_obj[[]] %>% dplyr::select(all_of(group_by)) %>% unique() %>% nrow()
+    groups <- seurat_obj[[]] %>% dplyr::select(all_of(group_by)) %>% unique()
+    n_groups <- nrow(groups)
   } else {
-    n_groups <- as.character(unique(Idents(seurat_obj))) %>% length()
+    groups <- as.character(unique(Idents(seurat_obj)))
+    n_groups <- length(groups)
   }
   
   # set colormap 
@@ -39,7 +44,38 @@ nice_violin_plot <- function(seurat_obj, features, group_by = NULL, cols = NULL,
       Seurat::NoLegend() +
       theme(axis.title.x = element_blank(),
             axis.title.y = element_text(size = 10))
-
+    
+    if (perform_stats) {
+      ## perform stats: only works on single plots for now ##
+      plot_data_all <- ggplot_build(plot)
+      x_groups <- plot_data_all$layout$panel_params[[1]]$x$get_labels() # get X groups
+      plot_data <- plot_data_all$data[[2]] # expression data per cell
+      
+      # add information about groups to plot_data
+      plot_data$group_name <- NA
+      for (ii in 1:n_groups) {
+        plot_data[plot_data$group == ii,]$group_name <- x_groups[ii]
+      }
+      
+      # perform stats on plot_data
+      if (n_groups > 2) {
+        stats <- pairwise.wilcox.test(plot_data$y, plot_data$group_name, p.adjust.method = "bonferroni")
+        p_vals <- stats$p.value %>% data.frame() %>% rownames_to_column(var = "group1") %>% melt()
+        p_vals <- p_vals[!is.na(p_vals$value),]
+        p_vals$value <- signif(p_vals$value, digits = 3)
+        
+        for (ii in 1:nrow(p_vals)) {
+          message(paste(p_vals$group1[ii], 'vs', p_vals$variable[ii], 'P =', p_vals$value[ii]))
+        }
+        
+      } else if (n_groups == 2) {
+        stats <- wilcox.test(plot_data %>% filter(group_name == x_groups[1]) %>% pull(y),
+                             plot_data %>% filter(group_name == x_groups[2]) %>% pull(y))
+        pval <- signif(stats$p.value, digits = 3)
+        message(paste(x_groups[1], 'vs', x_groups[2], 'P =', pval))
+      }
+    }
+    
     if (plot_hline == T) {
       plot <- plot + geom_hline(yintercept = 0, linetype = "dashed")
       return(plot)
@@ -57,7 +93,7 @@ nice_violin_plot <- function(seurat_obj, features, group_by = NULL, cols = NULL,
     plotlist <- lapply(plotlist, function(x)
       x + theme(axis.title.x = element_blank(),
                 axis.title.y = element_text(size = 10)) + NoLegend())
-
+    
     if (plot_hline == T) {
       plotlist <- lapply(plotlist, function(x)
         x + geom_hline(yintercept = 0, linetype = "dashed"))
