@@ -14,6 +14,9 @@
 
 nice_violin_plot <- function(seurat_obj, features, group_by = NULL, cols = NULL, pt.size = 0.3, sort = T, n_col = NULL, plot_hline = T) {
   
+  require(pals)
+  require(tidyverse)
+  
   # determine number of violins
   if (!is.null(group_by)) {
     n_groups <- seurat_obj[[]] %>% dplyr::select(all_of(group_by)) %>% unique() %>% nrow()
