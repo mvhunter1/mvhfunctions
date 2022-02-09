@@ -10,7 +10,7 @@
 #' @export
 #' @return UMAP or PCA plot.
 
-nice_dim_plot <- function(seurat_obj, group_by = NULL, cols = NULL, pt_size = 1.3, label = T, reduction = "umap", dims_plot = 1:2) {
+nice_dim_plot <- function(seurat_obj, group_by = NULL, cols = NULL, pt_size = 1.3, label = T, reduction = "umap", dims_plot = 1:2, n_col = NULL) {
   
   if (reduction == "umap" | reduction == "umap_new") {
     xlab <- "UMAP 1"

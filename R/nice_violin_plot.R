@@ -30,7 +30,7 @@ nice_violin_plot <- function(seurat_obj, features, group_by = NULL, cols = NULL,
   }
   
   # set colormap 
-  if ((is.null(cols)) & (length(features) < 13)) {
+  if ((is.null(cols)) & (n_groups < 13)) {
     cols <- tol(n_groups)
   }
   
