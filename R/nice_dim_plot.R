@@ -7,6 +7,7 @@
 #' @param label label groups with text on plot?
 #' @param reduction either "umap" or "pca".
 #' @param dims_plot dimensions to plot.
+#' @param n_col number of columns, only relevant if length of group_by > 1
 #' @export
 #' @return UMAP or PCA plot.
 
