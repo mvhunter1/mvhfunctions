@@ -9,10 +9,16 @@
 
 plot_ccle_data <- function(ccle_data, genes, cell_line_id = "A375") {
   # if not A375 or SKMEL28, need to provide cell_line_id as DepMap ID.
+  
   if (cell_line_id == "A375") {
     cell_line_id <- "ACH-000219"
   } else if (cell_line_id == "SKMEL28") {
     cell_line_id <- "ACH-000615"
+  } else {
+    # check if cell line ID is in dataset. if not, throw an error.
+    if (!cell_line_id %in% rownames(ccle_data)) {
+      stop('Cell line ID is not found in dataset.')
+    }
   }
   
   cell_line_data <- ccle_data[rownames(ccle_data) %in% cell_line_id,] %>% 
