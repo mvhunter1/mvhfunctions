@@ -12,7 +12,7 @@
 #' @export
 #' @return SpatialPlot.
 
-nice_spatial_dim_plot <- function(seurat_obj, group.by, im_alpha = 0, pt.size = 1.4, 
+nice_spatial_dim_plot <- function(seurat_obj, group.by = NULL, im_alpha = 0, pt.size = 1.4, 
                                     stroke = 0, cols = NULL, label = F, show_legend = T, crop = T) {
   
   require(Seurat)
@@ -38,6 +38,7 @@ nice_spatial_dim_plot <- function(seurat_obj, group.by, im_alpha = 0, pt.size = 
                                 image.alpha = im_alpha, 
                                 pt.size.factor = pt.size, 
                                 stroke = stroke, 
+                                repel = T,
                                 cols = cols, 
                                 crop = crop,
                                 label = T) + NoLegend()
