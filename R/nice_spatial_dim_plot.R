@@ -30,9 +30,9 @@ nice_spatial_dim_plot <- function(seurat_obj, group_by = NULL, im_alpha = 0, pt.
   
   # set colormap 
   if (is.null(cols)) {
-    if (n_dims <= 12) {
+    if (n_groups <= 12) {
       cols <- tol(n_groups)
-    } else if (n_dims <= 22) {
+    } else if (n_groups <= 22) {
       cols <- kelly(n = n_groups)
     } else {
       cols <- NULL
