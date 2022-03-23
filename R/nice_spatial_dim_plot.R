@@ -1,7 +1,7 @@
 #' @title nice_spatial_dim_plot
 #' @description nicer looking version of the Seurat function SpatialDimPlot.
 #' @param seurat_obj Seurat object.
-#' @param group.by what to colour the points by, usually a column in the Seurat object metadata.
+#' @param group_by what to colour the points by, usually a column in the Seurat object metadata.
 #' @param im_alpha set to 1 to plot the tissue image, 0 otherwise.
 #' @param pt.size size of plotted points on spatial array.
 #' @param stroke linewidth to outline plotted points in black (default = no outline).
@@ -12,29 +12,36 @@
 #' @export
 #' @return SpatialPlot.
 
-nice_spatial_dim_plot <- function(seurat_obj, group.by = NULL, im_alpha = 0, pt.size = 1.4, 
+nice_spatial_dim_plot <- function(seurat_obj, group_by = NULL, im_alpha = 0, pt.size = 1.4, 
                                     stroke = 0, cols = NULL, label = F, show_legend = T, crop = T) {
   
   require(Seurat)
+  require(tidyverse)
   require(pals)
   
-  # determine colormap to use
-  n_dims <- seurat_obj[[group.by]] %>% unique() %>% nrow()
+  # determine colormap to use based on number of groups
+  if (!is.null(group_by)) {
+    groups <- seurat_obj[[]] %>% dplyr::select(all_of(group_by)) %>% unique()
+    n_groups <- nrow(groups)
+  } else {
+    groups <- as.character(unique(Idents(seurat_obj)))
+    n_groups <- length(groups)
+  }
   
+  # set colormap 
   if (is.null(cols)) {
     if (n_dims <= 12) {
-      cols <- tol(n_dims)
+      cols <- tol(n_groups)
     } else if (n_dims <= 22) {
-      cols <- kelly(n = n_dims)
+      cols <- kelly(n = n_groups)
     } else {
       cols <- NULL
     }
   }
   
-  
   if (label) {
     plot <- Seurat::SpatialPlot(seurat_obj, 
-                                group.by = group.by, 
+                                group.by = group_by, 
                                 image.alpha = im_alpha, 
                                 pt.size.factor = pt.size, 
                                 stroke = stroke, 
@@ -45,7 +52,7 @@ nice_spatial_dim_plot <- function(seurat_obj, group.by = NULL, im_alpha = 0, pt.
   }
   else {
     plot <- Seurat::SpatialPlot(seurat_obj, 
-                                group.by = group.by, 
+                                group.by = group_by, 
                                 image.alpha = im_alpha, 
                                 pt.size.factor = pt.size, 
                                 stroke = stroke, 
