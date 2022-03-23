@@ -12,7 +12,8 @@ nice_violin_plot(
   pt.size = 0.3,
   sort = T,
   n_col = NULL,
-  plot_hline = T
+  plot_hline = T,
+  perform_stats = T
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ nice_violin_plot(
 \item{n_col}{if multiple features, how many columns to create in the final plot_grid object.}
 
 \item{plot_hline}{plot a dashed horizontal line at 0?}
+
+\item{perform_stats}{perform pairwise wilcoxon rank sum test between groups and print P values? *** only works for single plots for now}
 }
 \value{
 violin plot.

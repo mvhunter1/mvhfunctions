@@ -11,7 +11,8 @@ nice_dim_plot(
   pt_size = 1.3,
   label = T,
   reduction = "umap",
-  dims_plot = 1:2
+  dims_plot = 1:2,
+  n_col = NULL
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ nice_dim_plot(
 \item{reduction}{either "umap" or "pca".}
 
 \item{dims_plot}{dimensions to plot.}
+
+\item{n_col}{number of columns, only relevant if length of group_by > 1}
 }
 \value{
 UMAP or PCA plot.

@@ -6,7 +6,7 @@
 \usage{
 nice_spatial_dim_plot(
   seurat_obj,
-  group.by,
+  group_by = NULL,
   im_alpha = 0,
   pt.size = 1.4,
   stroke = 0,
@@ -19,7 +19,7 @@ nice_spatial_dim_plot(
 \arguments{
 \item{seurat_obj}{Seurat object.}
 
-\item{group.by}{what to colour the points by, usually a column in the Seurat object metadata.}
+\item{group_by}{what to colour the points by, usually a column in the Seurat object metadata.}
 
 \item{im_alpha}{set to 1 to plot the tissue image, 0 otherwise.}
 
