@@ -13,6 +13,11 @@
 
 nice_dim_plot <- function(seurat_obj, group_by = NULL, cols = NULL, pt_size = 1.3, label = T, reduction = "umap", dims_plot = 1:2, n_col = NULL) {
   
+  require(tidyverse)
+  require(Seurat)
+  require(pals)
+  require(cowplot)
+  
   if (reduction == "umap" | reduction == "umap_new") {
     xlab <- "UMAP 1"
     ylab <- "UMAP 2"
@@ -28,7 +33,28 @@ nice_dim_plot <- function(seurat_obj, group_by = NULL, cols = NULL, pt_size = 1.
     ylab <- paste(reduction, "2")
   }
   
+  
   if (length(group_by) == 1 | is.null(group_by)) {
+    
+    # determine colormap to use based on number of groups
+    if (!is.null(group_by)) {
+      groups <- seurat_obj[[]] %>% dplyr::select(all_of(group_by)) %>% unique()
+      n_groups <- nrow(groups)
+    } else {
+      groups <- as.character(unique(Idents(seurat_obj)))
+      n_groups <- length(groups)
+    }
+    
+    # set colormap 
+    if (is.null(cols)) {
+      if (n_groups <= 12) {
+        cols <- tol(n_groups)
+      } else if (n_groups <= 22) {
+        cols <- kelly(n = n_groups)
+      } else {
+        cols <- NULL
+      }
+    }
     
     if (label == T) {
       plot <- Seurat::DimPlot(seurat_obj,
