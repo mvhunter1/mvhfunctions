@@ -46,33 +46,38 @@ nice_violin_plot <- function(seurat_obj, features, group_by = NULL, cols = NULL,
             axis.title.y = element_text(size = 10))
     
     if (perform_stats) {
-      ## perform stats: only works on single plots for now ##
-      plot_data_all <- ggplot_build(plot)
-      x_groups <- plot_data_all$layout$panel_params[[1]]$x$get_labels() # get X groups
-      plot_data <- plot_data_all$data[[2]] # expression data per cell
       
-      # add information about groups to plot_data
-      plot_data$group_name <- NA
-      for (ii in 1:n_groups) {
-        plot_data[plot_data$group == ii,]$group_name <- x_groups[ii]
-      }
-      
-      # perform stats on plot_data
-      if (n_groups > 2) {
-        stats <- pairwise.wilcox.test(plot_data$y, plot_data$group_name, p.adjust.method = "bonferroni")
-        p_vals <- stats$p.value %>% data.frame() %>% rownames_to_column(var = "group1") %>% melt()
-        p_vals <- p_vals[!is.na(p_vals$value),]
-        p_vals$value <- signif(p_vals$value, digits = 3)
+      if (pt.size == 0) {
+        message('pt.size cannot be 0 if performing stats.')
+      } else {
+        ## perform stats: only works on single plots for now ##
+        plot_data_all <- ggplot_build(plot)
+        x_groups <- plot_data_all$layout$panel_params[[1]]$x$get_labels() # get X groups
+        plot_data <- plot_data_all$data[[2]] # expression data per cell
         
-        for (ii in 1:nrow(p_vals)) {
-          message(paste(p_vals$group1[ii], 'vs', p_vals$variable[ii], 'P =', p_vals$value[ii]))
+        # add information about groups to plot_data
+        plot_data$group_name <- NA
+        for (ii in 1:n_groups) {
+          plot_data[plot_data$group == ii,]$group_name <- x_groups[ii]
         }
         
-      } else if (n_groups == 2) {
-        stats <- wilcox.test(plot_data %>% filter(group_name == x_groups[1]) %>% pull(y),
-                             plot_data %>% filter(group_name == x_groups[2]) %>% pull(y))
-        pval <- signif(stats$p.value, digits = 3)
-        message(paste(x_groups[1], 'vs', x_groups[2], 'P =', pval))
+        # perform stats on plot_data
+        if (n_groups > 2) {
+          stats <- pairwise.wilcox.test(plot_data$y, plot_data$group_name, p.adjust.method = "bonferroni")
+          p_vals <- stats$p.value %>% data.frame() %>% rownames_to_column(var = "group1") %>% melt()
+          p_vals <- p_vals[!is.na(p_vals$value),]
+          p_vals$value <- signif(p_vals$value, digits = 3)
+          
+          for (ii in 1:nrow(p_vals)) {
+            message(paste(p_vals$group1[ii], 'vs', p_vals$variable[ii], 'P =', p_vals$value[ii]))
+          }
+          
+        } else if (n_groups == 2) {
+          stats <- wilcox.test(plot_data %>% filter(group_name == x_groups[1]) %>% pull(y),
+                               plot_data %>% filter(group_name == x_groups[2]) %>% pull(y))
+          pval <- signif(stats$p.value, digits = 3)
+          message(paste(x_groups[1], 'vs', x_groups[2], 'P =', pval))
+        }
       }
     }
     
@@ -83,6 +88,11 @@ nice_violin_plot <- function(seurat_obj, features, group_by = NULL, cols = NULL,
       return(plot)
     }
   } else {
+    
+    if (perform_stats) {
+      message('Stats cannot be performed if plotting multiple features (for now).')
+    }
+    
     plotlist <- Seurat::VlnPlot(seurat_obj,
                                 group.by = group_by,
                                 features = features,
