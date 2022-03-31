@@ -13,7 +13,7 @@
 #' @export
 #' @return UMAP or PCA plot.
 
-nice_feature_plot <- function(seurat_obj, features, pt.size = 1.3, n_col = NULL, reduction = "umap", dims_plot = 1:2, diverging_cmap = F, scale_data = F, cutoffs = NA, order = F) {
+nice_feature_plot <- function(seurat_obj, features, pt.size = 1.3, n_col = NULL, reduction = "umap", dims_plot = 1:2, diverging_cmap = F, scale_data = F, cutoffs = NA, order = T) {
 
   if (reduction == "umap") {
     xlab <- "UMAP 1"
