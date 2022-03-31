@@ -27,7 +27,7 @@ perform_nmf <- function(expression_matrix, rank = 20, save_NMF_results = F, file
   
   # run NMF
   message('Running NMF...')
-  nmf_results <- nmf(x = expression_matrix_filt, rank = rank, seed = 'ica', method = 'nsNMF')
+  nmf_results <- NMF::nmf(x = expression_matrix_filt, rank = rank, seed = 'ica', method = 'nsNMF')
   message('NMF calculations complete!')
   
   if (save_NMF_results) {
