@@ -26,7 +26,7 @@ perform_nmf <- function(expression_matrix, rank = 20, save_NMF_results = F, file
   t1 <- Sys.time() 
   if (use_fast_method) {
     
-    if (length(ranks) > 1) {
+    if (length(rank) > 1) {
       stop('Multiple ranks cannot be used with use_fast_method.')
     }
     
