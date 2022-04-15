@@ -25,6 +25,11 @@ perform_nmf <- function(expression_matrix, rank = 20, save_NMF_results = F, file
   message('Running NMF...')
   t1 <- Sys.time() 
   if (use_fast_method) {
+    
+    if (length(ranks) > 1) {
+      stop('Multiple ranks cannot be used with use_fast_method.')
+    }
+    
     require(RcppML) 
     require(Matrix)
     nmf_results <- RcppML::nmf(A = Matrix::Matrix(expression_matrix_filt, sparse = T), 
@@ -33,6 +38,7 @@ perform_nmf <- function(expression_matrix, rank = 20, save_NMF_results = F, file
   } else {
     require(NMF)
     require(fastICA)
+    message('Using slow NMF method. Warning: this may take hours to run...')
     nmf_results <- NMF::nmf(x = expression_matrix_filt, 
                             rank = rank, 
                             seed = 'ica', 
@@ -94,7 +100,7 @@ perform_nmf <- function(expression_matrix, rank = 20, save_NMF_results = F, file
   for (i in 1:ncol(scores)){
     ranks_y[ranks_x[,i] > 1,i] = Inf
   }
-  modules_fast_fxn <- apply(ranks_y, 2, function(m){
+  modules <- apply(ranks_y, 2, function(m){
     a <- sort(m[is.finite(m)])
     a <- a[a == 1:length(a)]
     names(a)
