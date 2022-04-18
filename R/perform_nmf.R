@@ -8,7 +8,7 @@
 #' @export
 #' @return NMF results list with matrix, modules, scores and coef.
 
-perform_nmf <- function(expression_matrix, rank = 20, save_NMF_results = F, filename = NULL, use_fast_method = F) {
+perform_nmf <- function(expression_matrix, rank = 20, save_NMF_results = F, filename = NULL, use_fast_method = T) {
   
   # make sure matrix is stored as matrix
   expression_matrix <- as.matrix(expression_matrix)
