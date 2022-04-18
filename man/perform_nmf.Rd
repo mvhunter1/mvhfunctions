@@ -8,21 +8,24 @@ perform_nmf(
   expression_matrix,
   rank = 20,
   save_NMF_results = F,
-  filename = NULL
+  filename = NULL,
+  use_fast_method = F
 )
 }
 \arguments{
-\item{expression_matrix}{For scRNA-seq or Visium, typically the output from GetAssayData for your cluster/cell type of interest.}
+\item{expression_matrix}{Expression matrix, commonly variable genes, for cell type of interest.}
 
-\item{rank}{Rank used for NMF, can be determined using NMFestimaterank.}
+\item{rank}{Rank for NMF, default = 20. Can be a vector of possible ranks but can only use multiple ranks if use_fast_method = F.}
 
-\item{save_NMF_results}{if T, will save NMF function output as .R file. This can be useful since the function takes several hours to run.}
+\item{save_NMF_results}{Save NMF results matrix in working dir?}
 
-\item{filename}{if save_NMF_results = T, filename that the NMF results will be saved as.}
+\item{filename}{Filename to save NMF results as.}
+
+\item{use_fast_method}{If T, will use the fast NMF method implemented in RcppML. Can only be used for a single rank.}
 }
 \value{
-a list containing the NMF results matrix, coefficients, scores, and modules.
+NMF results list with matrix, modules, scores and coef.
 }
 \description{
-perform NMF on a matrix of expression data.
+Perform NMF and create gene modules from expression matrix. Slightly modified code from Reuben and Dalia.
 }

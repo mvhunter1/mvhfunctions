@@ -14,7 +14,7 @@ nice_feature_plot(
   diverging_cmap = F,
   scale_data = F,
   cutoffs = NA,
-  order = F
+  order = T
 )
 }
 \arguments{
