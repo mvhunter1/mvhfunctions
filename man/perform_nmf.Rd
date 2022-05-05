@@ -9,7 +9,7 @@ perform_nmf(
   rank = 20,
   save_NMF_results = F,
   filename = NULL,
-  use_fast_method = F
+  use_fast_method = T
 )
 }
 \arguments{
