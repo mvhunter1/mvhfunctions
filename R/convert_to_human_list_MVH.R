@@ -1,18 +1,13 @@
-#' @title convert_to_human_list
+#' @title convert_to_human_list_MVH
 #' @description convert a fish genelist (character vector) to human, using DIOPT scores to remove duplicated genes. Intended to be used in cases where you don't have corresponding expression data for the genelist.
 #' @param genelist list of fish genes as character vector.
 #' @export
 #' @return a character vector of the human orthologs of the given fish genes.
 #'
 
-convert_to_human_list <- function(genelist) {
+convert_to_human_list_MVH <- function(genelist) {
 
-  fish.human.convert.Z11 <- tryCatch({
-    read.delim("GRCz11_to_HS.txt")
-  }, error = function(e) {
-    stop('GRCz11_to_HS.txt must be in the working directory to use this function.')
-  })
-    
+  fish.human.convert.Z11 <- read.delim("/Users/hunterm/Documents/R/from_Nate/GRCz11_to_HS.txt")
   fish.human.convert.Z11 <- fish.human.convert.Z11[fish.human.convert.Z11$DIOPT_Score > 6, ]
 
   genelist <- genelist[!is.na(genelist)] %>% data.frame()

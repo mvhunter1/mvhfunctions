@@ -13,7 +13,12 @@ convert_seurat_obj_to_human <- function(seurat_obj) {
   
   message('Loading conversion table...')
   # load conversion table
-  convert.table.Z11 <- read.delim("/Volumes/GoogleDrive-107501420737632855873/.shortcut-targets-by-id/1L5uwxnNO44Pd7GBMBhMGO9vvsi7uifYZ/White Lab Gsuite Main Drive/Lab members/Miranda Hunter/Miranda_R_new/from_Nate/GRCz11_to_HS.txt")
+  convert.table.Z11 <- tryCatch({
+    read.delim("GRCz11_to_HS.txt")
+  }, error = function(e) {
+    stop('GRCz11_to_HS.txt must be in the working directory to use this function.')
+  })
+    
   # filter for DIOPT score higher than 6 (may have to go higher?)
   fish.human.convert.Z11 <- convert.table.Z11[convert.table.Z11$DIOPT_Score > 6, ] %>% select(Zebrafish_Symbol, Human_Symbol, Weighted_Score)
   
