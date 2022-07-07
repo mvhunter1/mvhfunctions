@@ -1,4 +1,4 @@
-#' @title plot_expression_bulkRNAseq
+#' @title plot_expression_bulkRNAseq_old
 #' @description Plot expression - counts or normalized - of a given gene from bulk RNA-seq expression data. 
 #' @param genes gene to plot expression of.
 #' @param plot_counts plot expression of raw counts?
@@ -6,8 +6,7 @@
 #' @export
 #' @return plot.
 
-
-plot_expression_bulkRNAseq <- function(genes, plot_counts = F, plot_norm_expression = T) {
+plot_expression_bulkRNAseq_old <- function(genes, plot_counts = F, plot_norm_expression = T) {
   
   require(tidyverse)
   require(reshape2)
@@ -143,3 +142,4 @@ plot_expression_bulkRNAseq <- function(genes, plot_counts = F, plot_norm_express
   }
   return(plot)
 }
+
