@@ -4,24 +4,14 @@
 \alias{perform_nmf}
 \title{perform_nmf}
 \usage{
-perform_nmf(
-  expression_matrix,
-  rank = 20,
-  save_NMF_results = F,
-  filename = NULL,
-  use_fast_method = T
-)
+perform_nmf(seurat_obj, rank = 20, cluster_name)
 }
 \arguments{
-\item{expression_matrix}{Expression matrix, commonly variable genes, for cell type of interest.}
+\item{seurat_obj}{Seurat object.}
 
-\item{rank}{Rank for NMF, default = 20. Can be a vector of possible ranks but can only use multiple ranks if use_fast_method = F.}
+\item{rank}{Rank for NMF, default = 20.}
 
-\item{save_NMF_results}{Save NMF results matrix in working dir?}
-
-\item{filename}{Filename to save NMF results as.}
-
-\item{use_fast_method}{If T, will use the fast NMF method implemented in RcppML. Can only be used for a single rank.}
+\item{cluster_name}{Name of cluster or clusters you want to run NMF on.}
 }
 \value{
 NMF results list with matrix, modules, scores and coef.

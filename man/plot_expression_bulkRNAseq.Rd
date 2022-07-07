@@ -4,10 +4,10 @@
 \alias{plot_expression_bulkRNAseq}
 \title{plot_expression_bulkRNAseq}
 \usage{
-plot_expression_bulkRNAseq(gene, plot_counts = F, plot_norm_expression = T)
+plot_expression_bulkRNAseq(genes, plot_counts = F, plot_norm_expression = T)
 }
 \arguments{
-\item{gene}{gene to plot expression of.}
+\item{genes}{gene to plot expression of.}
 
 \item{plot_counts}{plot expression of raw counts?}
 
