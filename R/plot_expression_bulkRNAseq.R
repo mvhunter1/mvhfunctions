@@ -1,6 +1,6 @@
 #' @title plot_expression_bulkRNAseq
 #' @description Plot expression - counts or normalized - of a given gene from bulk RNA-seq expression data. 
-#' @param gene gene to plot expression of.
+#' @param genes gene to plot expression of.
 #' @param plot_counts plot expression of raw counts?
 #' @param plot_norm_expression plot normalized expression?
 #' @export
@@ -12,31 +12,31 @@ plot_expression_bulkRNAseq <- function(genes, plot_counts = F, plot_norm_express
   require(reshape2)
   require(cowplot)
   
-  if (length(gene) == 1) {
+  if (length(genes) == 1) {
     
     if (plot_counts && plot_norm_expression) {
       counts_for_plot <- tryCatch({
-        melt(counts_matrix_named[counts_matrix_named$hgnc_symbol == gene,])
+        melt(counts_matrix_named[counts_matrix_named$hgnc_symbol == genes,])
       }, error = function(e) {
         stop('Error in accessing data. Counts matrix must be stored as counts_matrix_named to plot counts with this function. Gene symbols must be a column called hgnc_symbol.')
       })
       norm_counts_for_plot <- tryCatch({
-        melt(vst_norm_matrix_named[vst_norm_matrix_named$hgnc_symbol == gene,])
+        melt(vst_norm_matrix_named[vst_norm_matrix_named$hgnc_symbol == genes,])
       }, error = function(e) {
         stop('Error in accessing data. Normalized expression matrix must be stored as vst_norm_matrix_named to plot normalized expression with this function. Gene symbols must be a column called hgnc_symbol.')
       })
       
       if (nrow(counts_for_plot) == 0) {
-        stop(paste(gene, 'not present in dataset.'))
+        stop(paste(genes, 'not present in dataset.'))
       }
       
       counts_for_plot$group <- substr(counts_for_plot$variable, 1,2)
       
       # plot
-      counts_plot <- ggplot(counts_for_plot %>% filter(hgnc_symbol == gene), aes(x = group, y = value, fill = group)) +
+      counts_plot <- ggplot(counts_for_plot %>% filter(hgnc_symbol == genes), aes(x = group, y = value, fill = group)) +
         geom_boxplot(size = 0.75) +
         scale_fill_manual(values = c('#CCCCCC', '#EF778E')) +
-        geom_point(data = norm_counts_for_plot %>% filter(hgnc_symbol == gene), aes(x = group, y = value), size = 2.5) +
+        geom_point(data = norm_counts_for_plot %>% filter(hgnc_symbol == genes), aes(x = group, y = value), size = 2.5) +
         theme_classic() +
         ylab('counts') +
         ggtitle(gene, 'raw counts') +
@@ -49,10 +49,10 @@ plot_expression_bulkRNAseq <- function(genes, plot_counts = F, plot_norm_express
               axis.ticks = element_line(size = 0.75),
               plot.title = element_text(size = 18, hjust = 0.5))
       
-      norm_plot <- ggplot(norm_counts_for_plot %>% filter(hgnc_symbol == gene), aes(x = group, y = value, fill = group)) +
+      norm_plot <- ggplot(norm_counts_for_plot %>% filter(hgnc_symbol == genes), aes(x = group, y = value, fill = group)) +
         geom_boxplot(size = 0.75) +
         scale_fill_manual(values = c('#CCCCCC', '#EF778E')) +
-        geom_point(data = norm_counts_for_plot %>% filter(hgnc_symbol == gene), aes(x = group, y = value), size = 2.5) +
+        geom_point(data = norm_counts_for_plot %>% filter(hgnc_symbol == genes), aes(x = group, y = value), size = 2.5) +
         theme_classic() +
         ylab('normalized counts') +
         ggtitle(gene, 'normalized expression') +
@@ -71,13 +71,13 @@ plot_expression_bulkRNAseq <- function(genes, plot_counts = F, plot_norm_express
     } else if (!plot_counts && plot_norm_expression) {
       if (plot_counts) {
         counts_for_plot <- tryCatch({
-          melt(counts_matrix_named[counts_matrix_named$hgnc_symbol == gene,])
+          melt(counts_matrix_named[counts_matrix_named$hgnc_symbol == genes,])
         }, error = function(e) {
           stop('Error in accessing data. Counts matrix must be stored as counts_matrix_named to plot counts with this function. Gene symbols must be a column called hgnc_symbol.')
         })
       } else if (plot_norm_expression) {
         counts_for_plot <- tryCatch({
-          melt(vst_norm_matrix_named[vst_norm_matrix_named$hgnc_symbol == gene,])
+          melt(vst_norm_matrix_named[vst_norm_matrix_named$hgnc_symbol == genes,])
         }, error = function(e) {
           stop('Error in accessing data. Normalized expression matrix must be stored as vst_norm_matrix_named to plot normalized expression with this function. Gene symbols must be a column called hgnc_symbol.')
         }) 
@@ -86,25 +86,29 @@ plot_expression_bulkRNAseq <- function(genes, plot_counts = F, plot_norm_express
       }
       
       if (nrow(counts_for_plot) == 0) {
-        stop(paste(gene, 'not present in dataset.'))
+        stop(paste(genes, 'not present in dataset.'))
       }
       
       counts_for_plot$group <- substr(counts_for_plot$variable, 1,2)
       
       # plot
+      pval <- dp_res_df_named[dp_res_df_named$hgnc_symbol == genes,]$padj %>% round(., digits = 4)
       plot <- ggplot(counts_for_plot, aes(x = group, y = value, fill = group)) +
-        geom_violin(scale = "width") +
-        geom_point(size = 2.5) +
-        #coord_cartesian(ylim = c(0, 3000)) + # uncomment to plot y axis starting at 0
-        theme(axis.text = element_text(size = 16, color = "black"),
-              axis.title = element_text(size = 18, color = "black"),
-              plot.title = element_text(size = 18, color = "black", face = "bold", hjust = 0.5),
-              legend.position = "none")
-      if (plot_counts) {
-        plot <- plot + ggtitle(paste(gene, 'counts')) + ylab('counts')
-      } else if (plot_norm_expression) {
-        plot <- plot + ggtitle(paste(gene, 'normalized expression')) + ylab('normalized expression')
-      }
+        geom_boxplot(size = 0.75) +
+        scale_fill_manual(values = c('#CCCCCC', '#EF778E')) +
+        geom_point(data = counts_for_plot, aes(x = group, y = value), size = 2.5) +
+        theme_classic() +
+        ylab('normalized counts') +
+        ggtitle(paste(genes, 'P =', pval)) +
+        theme(axis.title.x = element_blank(),
+              axis.text.x = element_blank(),
+              legend.position = "none",
+              axis.title.y = element_text(size = 20, color = "black"),
+              axis.text.y = element_text(size = 18, color = "black"),
+              axis.line = element_line(size = 0.75),
+              axis.ticks = element_line(size = 0.75),
+              plot.title = element_text(size = 18, hjust = 0.5))
+      
       
     }  
   } else {
@@ -138,3 +142,4 @@ plot_expression_bulkRNAseq <- function(genes, plot_counts = F, plot_norm_express
   }
   return(plot)
 }
+
