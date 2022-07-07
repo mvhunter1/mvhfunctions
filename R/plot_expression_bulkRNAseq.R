@@ -6,89 +6,135 @@
 #' @export
 #' @return plot.
 
-plot_expression_bulkRNAseq <- function(gene, plot_counts = F, plot_norm_expression = T) {
+plot_expression_bulkRNAseq <- function(genes, plot_counts = F, plot_norm_expression = T) {
   
   require(tidyverse)
   require(reshape2)
   require(cowplot)
   
-  if (plot_counts && plot_norm_expression) {
-    counts_for_plot <- tryCatch({
-      melt(counts_matrix_named[counts_matrix_named$hgnc_symbol == gene,])
-    }, error = function(e) {
-      stop('Error in accessing data. Counts matrix must be stored as counts_matrix_named to plot counts with this function. Gene symbols must be a column called hgnc_symbol.')
-    })
-    norm_counts_for_plot <- tryCatch({
-      melt(vst_norm_matrix_named[vst_norm_matrix_named$hgnc_symbol == gene,])
-    }, error = function(e) {
-      stop('Error in accessing data. Normalized expression matrix must be stored as vst_norm_matrix_named to plot normalized expression with this function. Gene symbols must be a column called hgnc_symbol.')
-    })
+  if (length(gene) == 1) {
     
-    if (nrow(counts_for_plot) == 0) {
-      stop(paste(gene, 'not present in dataset.'))
-    }
-    
-    counts_for_plot$group <- substr(counts_for_plot$variable, 1,2)
-    
-    # plot
-    counts_plot <- ggplot(counts_for_plot, aes(x = group, y = value, fill = group)) +
-      geom_violin(scale = "width") +
-      geom_point(size = 2.5) +
-      #coord_cartesian(ylim = c(0, 3000)) + # uncomment to plot y axis starting at 0
-      theme(axis.text = element_text(size = 16, color = "black"),
-            axis.title = element_text(size = 18, color = "black"),
-            plot.title = element_text(size = 18, color = "black", face = "bold", hjust = 0.5),
-            legend.position = "none") + ggtitle(paste(gene, 'counts')) + ylab('counts')
-    
-    norm_plot <- ggplot(norm_counts_for_plot, aes(x = group, y = value, fill = group)) +
-      geom_violin(scale = "width") +
-      geom_point(size = 2.5) +
-      #coord_cartesian(ylim = c(0, 3000)) + # uncomment to plot y axis starting at 0
-      theme(axis.text = element_text(size = 16, color = "black"),
-            axis.title = element_text(size = 18, color = "black"),
-            plot.title = element_text(size = 18, color = "black", face = "bold", hjust = 0.5),
-            legend.position = "none") + ggtitle(paste(gene, 'normalized expression')) + ylab('normalized expression')
-    
-    plots <- plot_grid(counts_plot, norm_plot, nrow = 1, align = "hv", axis = "lrbt")
-    return(plots)
-    
-  } else if (!plot_counts && plot_norm_expression) {
-    if (plot_counts) {
+    if (plot_counts && plot_norm_expression) {
       counts_for_plot <- tryCatch({
         melt(counts_matrix_named[counts_matrix_named$hgnc_symbol == gene,])
       }, error = function(e) {
         stop('Error in accessing data. Counts matrix must be stored as counts_matrix_named to plot counts with this function. Gene symbols must be a column called hgnc_symbol.')
       })
-    } else if (plot_norm_expression) {
-      counts_for_plot <- tryCatch({
+      norm_counts_for_plot <- tryCatch({
         melt(vst_norm_matrix_named[vst_norm_matrix_named$hgnc_symbol == gene,])
       }, error = function(e) {
         stop('Error in accessing data. Normalized expression matrix must be stored as vst_norm_matrix_named to plot normalized expression with this function. Gene symbols must be a column called hgnc_symbol.')
-      }) 
-    } else {
-      stop('One of plot_counts or plot_norm_expression must be TRUE.')
-    }
+      })
+      
+      if (nrow(counts_for_plot) == 0) {
+        stop(paste(gene, 'not present in dataset.'))
+      }
+      
+      counts_for_plot$group <- substr(counts_for_plot$variable, 1,2)
+      
+      # plot
+      counts_plot <- ggplot(counts_for_plot %>% filter(hgnc_symbol == gene), aes(x = group, y = value, fill = group)) +
+        geom_boxplot(size = 0.75) +
+        scale_fill_manual(values = c('#CCCCCC', '#EF778E')) +
+        geom_point(data = norm_counts_for_plot %>% filter(hgnc_symbol == gene), aes(x = group, y = value), size = 2.5) +
+        theme_classic() +
+        ylab('counts') +
+        ggtitle(gene, 'raw counts') +
+        theme(axis.title.x = element_blank(),
+              axis.text.x = element_blank(),
+              legend.position = "none",
+              axis.title.y = element_text(size = 20, color = "black"),
+              axis.text.y = element_text(size = 18, color = "black"),
+              axis.line = element_line(size = 0.75),
+              axis.ticks = element_line(size = 0.75),
+              plot.title = element_text(size = 18, hjust = 0.5))
+      
+      norm_plot <- ggplot(norm_counts_for_plot %>% filter(hgnc_symbol == gene), aes(x = group, y = value, fill = group)) +
+        geom_boxplot(size = 0.75) +
+        scale_fill_manual(values = c('#CCCCCC', '#EF778E')) +
+        geom_point(data = norm_counts_for_plot %>% filter(hgnc_symbol == gene), aes(x = group, y = value), size = 2.5) +
+        theme_classic() +
+        ylab('normalized counts') +
+        ggtitle(gene, 'normalized expression') +
+        theme(axis.title.x = element_blank(),
+              axis.text.x = element_blank(),
+              legend.position = "none",
+              axis.title.y = element_text(size = 20, color = "black"),
+              axis.text.y = element_text(size = 18, color = "black"),
+              axis.line = element_line(size = 0.75),
+              axis.ticks = element_line(size = 0.75),
+              plot.title = element_text(size = 18, hjust = 0.5))
+      
+      plots <- plot_grid(counts_plot, norm_plot, nrow = 1, align = "hv", axis = "lrbt")
+      return(plots)
+      
+    } else if (!plot_counts && plot_norm_expression) {
+      if (plot_counts) {
+        counts_for_plot <- tryCatch({
+          melt(counts_matrix_named[counts_matrix_named$hgnc_symbol == gene,])
+        }, error = function(e) {
+          stop('Error in accessing data. Counts matrix must be stored as counts_matrix_named to plot counts with this function. Gene symbols must be a column called hgnc_symbol.')
+        })
+      } else if (plot_norm_expression) {
+        counts_for_plot <- tryCatch({
+          melt(vst_norm_matrix_named[vst_norm_matrix_named$hgnc_symbol == gene,])
+        }, error = function(e) {
+          stop('Error in accessing data. Normalized expression matrix must be stored as vst_norm_matrix_named to plot normalized expression with this function. Gene symbols must be a column called hgnc_symbol.')
+        }) 
+      } else {
+        stop('One of plot_counts or plot_norm_expression must be TRUE.')
+      }
+      
+      if (nrow(counts_for_plot) == 0) {
+        stop(paste(gene, 'not present in dataset.'))
+      }
+      
+      counts_for_plot$group <- substr(counts_for_plot$variable, 1,2)
+      
+      # plot
+      plot <- ggplot(counts_for_plot, aes(x = group, y = value, fill = group)) +
+        geom_violin(scale = "width") +
+        geom_point(size = 2.5) +
+        #coord_cartesian(ylim = c(0, 3000)) + # uncomment to plot y axis starting at 0
+        theme(axis.text = element_text(size = 16, color = "black"),
+              axis.title = element_text(size = 18, color = "black"),
+              plot.title = element_text(size = 18, color = "black", face = "bold", hjust = 0.5),
+              legend.position = "none")
+      if (plot_counts) {
+        plot <- plot + ggtitle(paste(gene, 'counts')) + ylab('counts')
+      } else if (plot_norm_expression) {
+        plot <- plot + ggtitle(paste(gene, 'normalized expression')) + ylab('normalized expression')
+      }
+      
+    }  
+  } else {
     
-    if (nrow(counts_for_plot) == 0) {
-      stop(paste(gene, 'not present in dataset.'))
-    }
+    ## For multiple genes - only plots normalized counts for now (will update in future)
     
-    counts_for_plot$group <- substr(counts_for_plot$variable, 1,2)
+    norm_counts_for_plot <- melt(vst_norm_matrix_named[vst_norm_matrix_named$hgnc_symbol %in% genes,])
+    norm_counts_for_plot$group <- substr(norm_counts_for_plot$variable, 1, 2)
     
-    # plot
-    plot <- ggplot(counts_for_plot, aes(x = group, y = value, fill = group)) +
-      geom_violin(scale = "width") +
-      geom_point(size = 2.5) +
-      #coord_cartesian(ylim = c(0, 3000)) + # uncomment to plot y axis starting at 0
-      theme(axis.text = element_text(size = 16, color = "black"),
-            axis.title = element_text(size = 18, color = "black"),
-            plot.title = element_text(size = 18, color = "black", face = "bold", hjust = 0.5),
-            legend.position = "none")
-    if (plot_counts) {
-      plot <- plot + ggtitle(paste(gene, 'counts')) + ylab('counts')
-    } else if (plot_norm_expression) {
-      plot <- plot + ggtitle(paste(gene, 'normalized expression')) + ylab('normalized expression')
+    plotlist <- NULL
+    for (gene in genes) {
+      pval <- dp_res_df_named[dp_res_df_named$hgnc_symbol == gene,]$padj %>% round(., digits = 4)
+      plotlist[[gene]] <- ggplot(norm_counts_for_plot %>% filter(hgnc_symbol == gene), aes(x = group, y = value, fill = group)) +
+        geom_boxplot(size = 0.75) +
+        scale_fill_manual(values = c('#CCCCCC', '#EF778E')) +
+        geom_point(data = norm_counts_for_plot %>% filter(hgnc_symbol == gene), aes(x = group, y = value), size = 2.5) +
+        theme_classic() +
+        ylab('normalized counts') +
+        ggtitle(paste(gene, 'P =', pval)) +
+        theme(axis.title.x = element_blank(),
+              axis.text.x = element_blank(),
+              legend.position = "none",
+              axis.title.y = element_text(size = 20, color = "black"),
+              axis.text.y = element_text(size = 18, color = "black"),
+              axis.line = element_line(size = 0.75),
+              axis.ticks = element_line(size = 0.75),
+              plot.title = element_text(size = 18, hjust = 0.5))
     }
-    return(plot)
-  }  
+    plot <- plot_grid(plotlist = plotlist, align = "hv", axis = "lrbt")
+    
+  }
+  return(plot)
 }
