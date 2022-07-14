@@ -7,7 +7,7 @@
 #' @return bargraph of normalized expression of the given genes.
 
 
-plot_ccle_data_MVH<- function(ccle_data, genes, cell_line_id = "A375") {
+plot_ccle_data_MVH<- function(genes, cell_line_id = "A375") {
   # if not A375 or SKMEL28, need to provide cell_line_id as DepMap ID.
   
   load('/Volumes/GoogleDrive-107501420737632855873/.shortcut-targets-by-id/1L5uwxnNO44Pd7GBMBhMGO9vvsi7uifYZ/White Lab Gsuite Main Drive/Lab members/Miranda Hunter/Miranda_R_new/CCLE/ccle_data.R')
