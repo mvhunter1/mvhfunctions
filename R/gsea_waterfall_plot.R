@@ -4,10 +4,12 @@
 #' @param pathways_to_highlight a character vector with the exact names of the pathways you want highlighted on your waterfall plot in red circles.
 #' @param labels_for_plot optional: a character vector with the exact names of the pathways you want labelled as text on your plot.
 #' @param n_terms the number of terms to be plotted.
+#' @param transparent if you want the non-labelled points to be transparent - looks better but causes issues with exporting.
+#' @param col_label colour to label points of interest with.
 #' @export
 #' @return double waterfall plot.
 
-gsea_waterfall_plot <- function(gsea_results, pathways_to_highlight, labels_for_plot = NULL, n_terms = 250) {
+gsea_waterfall_plot <- function(gsea_results, pathways_to_highlight, labels_for_plot = NULL, n_terms = 250, transparent = T, col_label = NULL) {
 
   # find the top pathways by NES
   gsea.up <- gsea_results %>%
@@ -42,11 +44,25 @@ gsea_waterfall_plot <- function(gsea_results, pathways_to_highlight, labels_for_
                           by = "pathway")
 
   gsea.waterfall$label_pathway <- factor(gsea.waterfall$label_pathway, levels = c("yes", "no"))
-
+  
+  if (is.null(col_label)) {
+    if (transparent) {
+      cols <- c("#E01111", "#B2B2B220")
+    } else {
+      cols <- c("#E01111", "#B2B2B2")
+    }
+  } else {
+    if (transparent) {
+      cols <- c(col_label, "#B2B2B220")
+    } else {
+      cols <- c(col_label, "#B2B2B2")
+    }
+  }
+  
   # create plot
   plot <- ggplot(gsea.waterfall, aes(x = index, y = NES)) +
     geom_point(aes(color = label_pathway), size = 4) +
-    scale_color_manual(values = c("#E01111", "#B2B2B220")) +
+    scale_color_manual(values = cols) +
     geom_hline(yintercept = 0, size = 1) +
     theme_minimal() +
     # scale_y_continuous(limits = c(-3.1, 3.1), breaks = seq(-3,3,1)) + # change this to change the y axis limits
