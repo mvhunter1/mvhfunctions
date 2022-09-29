@@ -17,12 +17,12 @@ plot_expression_bulkRNAseq <- function(genes, plot_counts = F, plot_norm_express
     
     if (plot_counts && plot_norm_expression) {
       counts_for_plot <- tryCatch({
-        melt(counts_matrix_named[counts_matrix_named$hgnc_symbol == genes,])
+        reshape2::melt(counts_matrix_named[counts_matrix_named$hgnc_symbol == genes,])
       }, error = function(e) {
         stop('Error in accessing data. Counts matrix must be stored as counts_matrix_named to plot counts with this function. Gene symbols must be a column called hgnc_symbol.')
       })
       norm_counts_for_plot <- tryCatch({
-        melt(vst_norm_matrix_named[vst_norm_matrix_named$hgnc_symbol == genes,])
+        reshape2::melt(vst_norm_matrix_named[vst_norm_matrix_named$hgnc_symbol == genes,])
       }, error = function(e) {
         stop('Error in accessing data. Normalized expression matrix must be stored as vst_norm_matrix_named to plot normalized expression with this function. Gene symbols must be a column called hgnc_symbol.')
       })
@@ -72,13 +72,13 @@ plot_expression_bulkRNAseq <- function(genes, plot_counts = F, plot_norm_express
     } else if (!plot_counts && plot_norm_expression) {
       if (plot_counts) {
         counts_for_plot <- tryCatch({
-          melt(counts_matrix_named[counts_matrix_named$hgnc_symbol == genes,])
+          reshape2::melt(counts_matrix_named[counts_matrix_named$hgnc_symbol == genes,])
         }, error = function(e) {
           stop('Error in accessing data. Counts matrix must be stored as counts_matrix_named to plot counts with this function. Gene symbols must be a column called hgnc_symbol.')
         })
       } else if (plot_norm_expression) {
         counts_for_plot <- tryCatch({
-          melt(vst_norm_matrix_named[vst_norm_matrix_named$hgnc_symbol == genes,])
+          reshape2::melt(vst_norm_matrix_named[vst_norm_matrix_named$hgnc_symbol == genes,])
         }, error = function(e) {
           stop('Error in accessing data. Normalized expression matrix must be stored as vst_norm_matrix_named to plot normalized expression with this function. Gene symbols must be a column called hgnc_symbol.')
         }) 
@@ -116,7 +116,7 @@ plot_expression_bulkRNAseq <- function(genes, plot_counts = F, plot_norm_express
     
     ## For multiple genes - only plots normalized counts for now (will update in future)
     
-    norm_counts_for_plot <- melt(vst_norm_matrix_named[vst_norm_matrix_named$hgnc_symbol %in% genes,])
+    norm_counts_for_plot <- reshape2::melt(vst_norm_matrix_named[vst_norm_matrix_named$hgnc_symbol %in% genes,])
     norm_counts_for_plot$group <- substr(norm_counts_for_plot$variable, 1, 2)
     
     plotlist <- NULL
