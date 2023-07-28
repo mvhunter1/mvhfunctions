@@ -77,6 +77,10 @@ nice_violin_plot <- function(seurat_obj, features, group_by = NULL, cols = NULL,
                                plot_data %>% filter(group_name == x_groups[2]) %>% pull(y))
           pval <- signif(stats$p.value, digits = 3)
           message(paste(x_groups[1], 'vs', x_groups[2], 'P =', pval))
+          # add pval to plot
+          plot <- plot + 
+            labs(title = features, subtitle = paste('P = ', pval)) +
+            theme(plot.subtitle = element_text(size = 14, face = "bold", hjust = 0.5))
         }
       }
     }
