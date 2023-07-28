@@ -4,14 +4,14 @@
 \alias{plot_ccle_data_MVH}
 \title{plot_ccle_data_MVH}
 \usage{
-plot_ccle_data_MVH(ccle_data, genes, cell_line_id = "A375")
+plot_ccle_data_MVH(genes, cell_line_id = "A375")
 }
 \arguments{
-\item{ccle_data}{CCLE log2 RSEM data, with genes as rownames as HGNC ID.}
-
 \item{genes}{genelist to plot.}
 
 \item{cell_line_id}{Cell line you want to plot. If A375 or SKMEL28, can just put those names. If anything else, need to put DepMap cell line ID.}
+
+\item{ccle_data}{CCLE log2 RSEM data, with genes as rownames as HGNC ID.}
 }
 \value{
 bargraph of normalized expression of the given genes.

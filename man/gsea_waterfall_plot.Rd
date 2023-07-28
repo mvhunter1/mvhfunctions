@@ -8,7 +8,9 @@ gsea_waterfall_plot(
   gsea_results,
   pathways_to_highlight,
   labels_for_plot = NULL,
-  n_terms = 250
+  n_terms = 250,
+  transparent = T,
+  col_label = NULL
 )
 }
 \arguments{
@@ -19,6 +21,10 @@ gsea_waterfall_plot(
 \item{labels_for_plot}{optional: a character vector with the exact names of the pathways you want labelled as text on your plot.}
 
 \item{n_terms}{the number of terms to be plotted.}
+
+\item{transparent}{if you want the non-labelled points to be transparent - looks better but causes issues with exporting.}
+
+\item{col_label}{colour to label points of interest with.}
 }
 \value{
 double waterfall plot.
