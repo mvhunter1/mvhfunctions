@@ -12,12 +12,14 @@
 #' @param alpha if T, will fill points such that lower expression values are more transparent.
 #' @param cols optional: gradient vector of colours to use for plotting.
 #' @param crop Crop tissue array to focus on region with spots?
+#' @param min.cutoff Minimum value to bin expression data within
+#' @param max.cutoff Max value to bin expression data within
 #' @export
 #' @return SpatialFeaturePlot.
 
 nice_spatial_feature_plot <- function(seurat_obj, features, im_alpha = 0, pt_size = 1.3, 
                                         stroke = 0, new_cmap = T, cmap = "inferno", n_col = NULL, 
-                                        diverging_cmap = F, alpha = T, cols = NULL, crop = T) 
+                                        diverging_cmap = F, alpha = T, cols = NULL, crop = T, min.cutoff = 0, max.cutoff = NULL) 
 {
   
   require(Seurat)
@@ -51,7 +53,9 @@ nice_spatial_feature_plot <- function(seurat_obj, features, im_alpha = 0, pt_siz
                                  stroke = stroke, 
                                  pt.size.factor = pt_size, 
                                  combine = F, 
-                                 crop = crop)
+                                 crop = crop,
+                                 min.cutoff = min.cutoff,
+                                 max.cutoff = max.cutoff)
     plots <- lapply(plots, function(x) x + scale_fill_gradientn(colours = cols) + 
                       theme(legend.title = element_text(face = "bold", 
                                                         size = 16)))
@@ -64,7 +68,9 @@ nice_spatial_feature_plot <- function(seurat_obj, features, im_alpha = 0, pt_siz
                                  stroke = stroke, 
                                  pt.size.factor = pt_size, 
                                  combine = F, 
-                                 crop = crop)
+                                 crop = crop,
+                                 min.cutoff = min.cutoff,
+                                 max.cutoff = max.cutoff)
     plots <- lapply(plots, function(x) x + theme(legend.title = element_text(face = "bold", 
                                                                              size = 16)))
   }
