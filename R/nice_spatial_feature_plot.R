@@ -19,7 +19,7 @@
 
 nice_spatial_feature_plot <- function(seurat_obj, features, im_alpha = 0, pt_size = 1.3, 
                                         stroke = 0, new_cmap = T, cmap = "inferno", n_col = NULL, 
-                                        diverging_cmap = F, alpha = T, cols = NULL, crop = T, min.cutoff = 0, max.cutoff = NULL) 
+                                        diverging_cmap = F, alpha = T, cols = NULL, crop = T, min.cutoff = 0, max.cutoff = NA) 
 {
   
   require(Seurat)
