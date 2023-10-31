@@ -12,11 +12,13 @@ nice_spatial_feature_plot(
   stroke = 0,
   new_cmap = T,
   cmap = "inferno",
-  n_col = NULL,
+  n_col = 3,
   diverging_cmap = F,
   alpha = T,
   cols = NULL,
-  crop = T
+  crop = T,
+  min.cutoff = 0,
+  max.cutoff = NA
 )
 }
 \arguments{
@@ -41,6 +43,10 @@ nice_spatial_feature_plot(
 \item{cols}{optional: gradient vector of colours to use for plotting.}
 
 \item{crop}{Crop tissue array to focus on region with spots?}
+
+\item{min.cutoff}{Minimum value to bin expression data within}
+
+\item{max.cutoff}{Max value to bin expression data within}
 
 \item{pt.size}{size of plotted points.}
 }
