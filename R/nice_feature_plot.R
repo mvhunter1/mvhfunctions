@@ -15,13 +15,27 @@
 
 nice_feature_plot <- function(seurat_obj, features, pt.size = 1.3, n_col = NULL, reduction = "umap", dims_plot = 1:2, diverging_cmap = F, scale_data = F, cutoffs = NA, order = T) {
 
-  if (reduction == "umap") {
-    xlab <- "UMAP 1"
-    ylab <- "UMAP 2"
-  } else if (reduction == "pca") {
+  # new: check for presence of 'umap' dimreduc. If not present, look for other dimreducs with UMAP in name.
+  if (reduction == 'umap') {
+    dimreducs <- tolower(names(seurat_obj@reductions))
+    
+    if (any(grepl('umap', dimreducs, fixed = T, ignore.case = F))) {
+      umap_dimreduc_name <- grep('umap', names(seurat_obj@reductions), fixed = F, value = T, ignore.case = T)
+      
+      if (length(umap_dimreduc_name) > 1) {
+        stop('Multiple UMAP dimreducs present in object - clarify which one you want to plot.')
+      } else if (length(umap_dimreduc_name) == 0) {
+        stop('No UMAP dimreducs present in object.')
+      } else {
+        reduction <- umap_dimreduc_name
+      }
+    }
+    xlab <- 'UMAP 1'
+    ylab <- 'UMAP 2'
+  } else if (reduction == 'pca') {
     # determine % variability associated with each PC
     pct <- seurat_obj[["pca"]]@stdev / sum(seurat_obj[["pca"]]@stdev) * 100
-
+    
     # make x and y axis labels
     xlab <- paste0("PC", dims_plot[1], " ", round(pct[dims_plot[1]],2), "%")
     ylab <- paste0("PC", dims_plot[2], " ", round(pct[dims_plot[2]],2), "%")
