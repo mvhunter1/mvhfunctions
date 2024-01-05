@@ -17,10 +17,10 @@ nice_feature_plot <- function(seurat_obj, features, pt.size = 1.3, n_col = NULL,
 
   # new: check for presence of 'umap' dimreduc. If not present, look for other dimreducs with UMAP in name.
   if (reduction == 'umap') {
-    dimreducs <- tolower(names(seurat_obj@reductions))
+    dimreducs <- names(seurat_obj@reductions)
     
-    if (any(grepl('umap', dimreducs, fixed = T, ignore.case = F))) {
-      umap_dimreduc_name <- grep('umap', names(seurat_obj@reductions), fixed = F, value = T, ignore.case = T)
+    if (any(grepl('umap', tolower(dimreducs), fixed = T, ignore.case = F))) {
+      umap_dimreduc_name <- grep('umap', dimreducs, fixed = F, value = T, ignore.case = T)
       
       if (length(umap_dimreduc_name) > 1) {
         stop('Multiple UMAP dimreducs present in object - clarify which one you want to plot.')
