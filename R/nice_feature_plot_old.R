@@ -1,4 +1,4 @@
-#' @title nice_feature_plot
+#' @title nice_feature_plot_old
 #' @description nicer looking version of the Seurat function FeaturePlot.
 #' @param seurat_obj Seurat object.
 #' @param features genes to plot.
@@ -13,7 +13,7 @@
 #' @export
 #' @return UMAP or PCA plot.
 
-nice_feature_plot <- function(seurat_obj, features, pt.size = 1.3, n_col = NULL, reduction = "umap", dims_plot = 1:2, diverging_cmap = F, scale_data = F, cutoffs = NA, order = T) {
+nice_feature_plot_old <- function(seurat_obj, features, pt.size = 1.3, n_col = NULL, reduction = "umap", dims_plot = 1:2, diverging_cmap = F, scale_data = F, cutoffs = NA, order = T) {
 
   # new: check for presence of 'umap' dimreduc. If not present, look for other dimreducs with UMAP in name.
   if (reduction == 'umap') {

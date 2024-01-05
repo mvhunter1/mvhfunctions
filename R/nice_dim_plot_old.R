@@ -1,4 +1,4 @@
-#' @title nice_dim_plot
+#' @title nice_dim_plot_old
 #' @description nicer looking version of the Seurat function DimPlot.
 #' @param seurat_obj Seurat object.
 #' @param group_by optional: what to colour the points by, usually a column in the Seurat object metadata. Otherwise will color by the default ident.
@@ -11,7 +11,7 @@
 #' @export
 #' @return UMAP or PCA plot.
 
-nice_dim_plot <- function(seurat_obj, group_by = NULL, cols = NULL, pt_size = 1.3, label = T, reduction = "umap", dims_plot = 1:2, n_col = NULL) {
+nice_dim_plot_old <- function(seurat_obj, group_by = NULL, cols = NULL, pt_size = 1.3, label = T, reduction = "umap", dims_plot = 1:2, n_col = NULL) {
   
   require(tidyverse)
   require(Seurat)
