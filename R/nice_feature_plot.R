@@ -39,6 +39,9 @@ nice_feature_plot <- function(seurat_obj, features, pt.size = 1.3, n_col = NULL,
     # make x and y axis labels
     xlab <- paste0("PC", dims_plot[1], " ", round(pct[dims_plot[1]],2), "%")
     ylab <- paste0("PC", dims_plot[2], " ", round(pct[dims_plot[2]],2), "%")
+  } else if (reduction == 'tsne') {
+    xlab <- 'tSNE 1'
+    ylab <- 'tSNE 2'
   }
 
   if (diverging_cmap) {
